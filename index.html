@@ -2,27 +2,190 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lachie’s Form</title>
+  <title>Membership Form</title>
+  <style>
+    .hidden {
+      display: none;
+    }
+    label {
+      display: block;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
 
-  <h1>Contact form</h1>
+<h1>Membership Form</h1>
 
-  <form action="https://lachies-form-handler.lachymcc.workers.dev" method="POST">
+<form action="https://lachies-form-handler.lachymcc.workers.dev" method="POST" id="membershipForm">
+
+  <!-- Metadata -->
+  <input type="hidden" name="form_version" value="v1">
+
+  <!-- Membership type -->
+  <label>
+    Membership type:
+    <select name="membership_type" id="membershipType" required>
+      <option value="">-- Select --</option>
+      <option value="sympathiser">Sympathiser</option>
+      <option value="applicant">Applicant member</option>
+      <option value="cadre">Cadre member</option>
+    </select>
+  </label>
+
+  <!-- Shared fields -->
+  <label>
+    Name:
+    <input type="text" name="name" id="name" required>
+  </label>
+
+  <label>
+    Phone:
+    <input type="tel" name="phone" id="phone">
+  </label>
+
+  <label>
+    Email:
+    <input type="email" name="email" id="email">
+  </label>
+
+  <!-- Sympathiser -->
+  <div id="sympathiserFields" class="hidden">
+    <h3>Sympathiser details</h3>
+
     <label>
-      Name:<br>
-      <input type="text" name="name">
+      Cell:
+      <select name="cell_sympathiser">
+        <option value="">-- Select --</option>
+        <option value="cell_a">Cell A</option>
+        <option value="cell_b">Cell B</option>
+      </select>
     </label>
-    <br><br>
 
     <label>
-      Email:<br>
-      <input type="email" name="email" required>
+      Interests:
+      <select name="interests" multiple>
+        <option value="education">Education</option>
+        <option value="union">Union work</option>
+        <option value="mutual_aid">Mutual aid</option>
+      </select>
     </label>
-    <br><br>
+  </div>
 
-    <button type="submit">Send</button>
-  </form>
+  <!-- Applicant -->
+  <div id="applicantFields" class="hidden">
+    <h3>Applicant details</h3>
+
+    <label>
+      Cell:
+      <select name="cell_applicant" id="cellApplicant">
+        <option value="">-- Select --</option>
+        <option value="cell_a">Cell A</option>
+        <option value="cell_b">Cell B</option>
+      </select>
+    </label>
+
+    <label>
+      Dues rate:
+      <select name="dues_rate_applicant" id="duesApplicant">
+        <option value="">-- Select --</option>
+        <option value="low">Low</option>
+        <option value="standard">Standard</option>
+        <option value="solidarity">Solidarity</option>
+      </select>
+    </label>
+  </div>
+
+  <!-- Cadre -->
+  <div id="cadreFields" class="hidden">
+    <h3>Cadre details</h3>
+
+    <label>
+      Cell:
+      <select name="cell_cadre" id="cellCadre">
+        <option value="">-- Select --</option>
+        <option value="cell_a">Cell A</option>
+        <option value="cell_b">Cell B</option>
+      </select>
+    </label>
+
+    <label>
+      Activity:
+      <select name="activity" id="activity">
+        <option value="">-- Select --</option>
+        <option value="organising">Organising</option>
+        <option value="education">Education</option>
+        <option value="logistics">Logistics</option>
+      </select>
+    </label>
+
+    <label>
+      Dues rate:
+      <select name="dues_rate_cadre" id="duesCadre">
+        <option value="">-- Select --</option>
+        <option value="standard">Standard</option>
+        <option value="solidarity">Solidarity</option>
+      </select>
+    </label>
+  </div>
+
+  <br>
+  <input type="hidden" name="form_version" value="v1">
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const membershipType = document.getElementById("membershipType");
+
+  const sympathiser = document.getElementById("sympathiserFields");
+  const applicant = document.getElementById("applicantFields");
+  const cadre = document.getElementById("cadreFields");
+
+  const phone = document.getElementById("phone");
+  const email = document.getElementById("email");
+
+  const cellApplicant = document.getElementById("cellApplicant");
+  const duesApplicant = document.getElementById("duesApplicant");
+
+  const cellCadre = document.getElementById("cellCadre");
+  const activity = document.getElementById("activity");
+  const duesCadre = document.getElementById("duesCadre");
+
+  membershipType.addEventListener("change", () => {
+    // Hide all
+    sympathiser.classList.add("hidden");
+    applicant.classList.add("hidden");
+    cadre.classList.add("hidden");
+
+    // Reset required flags
+    phone.required = false;
+    email.required = false;
+    cellApplicant.required = false;
+    duesApplicant.required = false;
+    cellCadre.required = false;
+    activity.required = false;
+    duesCadre.required = false;
+
+    if (membershipType.value === "sympathiser") {
+      sympathiser.classList.remove("hidden");
+    }
+
+    if (membershipType.value === "applicant") {
+      applicant.classList.remove("hidden");
+      cellApplicant.required = true;
+      duesApplicant.required = true;
+    }
+
+    if (membershipType.value === "cadre") {
+      cadre.classList.remove("hidden");
+      phone.required = true;
+      email.required = true;
+      cellCadre.required = true;
+      activity.required = true;
+      duesCadre.required = true;
+    }
+  });
+</script>
 
 </body>
 </html>
